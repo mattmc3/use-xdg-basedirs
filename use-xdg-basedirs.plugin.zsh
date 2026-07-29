@@ -12,7 +12,11 @@ mkdir -p $XDG_CONFIG_HOME $XDG_CACHE_HOME $XDG_DATA_HOME $XDG_STATE_HOME
 if [[ -z "$XDG_RUNTIME_DIR" ]]; then
   export XDG_RUNTIME_DIR="/tmp/xdg-runtime-$UID"
 fi
-[[ -d "$XDG_RUNTIME_DIR" ]] || mkdir -m 700 $XDG_RUNTIME_DIR
+if [[ ! -d "$XDG_RUNTIME_DIR" ]]; then
+  mkdir -m 700 -p "$XDG_RUNTIME_DIR"
+elif [[ ! -O "$XDG_RUNTIME_DIR" || -L "$XDG_RUNTIME_DIR" ]]; then
+  print -u2 "use-xdg-basedirs: $XDG_RUNTIME_DIR is a symlink or not owned by uid $UID"
+fi
 
 # readline
 export INPUTRC="${INPUTRC:-$XDG_CONFIG_HOME/readline/inputrc}"
