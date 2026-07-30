@@ -18,8 +18,9 @@ elif [[ ! -O "$XDG_RUNTIME_DIR" || -L "$XDG_RUNTIME_DIR" ]]; then
   print -u2 "use-xdg-basedirs: $XDG_RUNTIME_DIR is a symlink or not owned by uid $UID"
 fi
 
-# readline
-export INPUTRC="${INPUTRC:-$XDG_CONFIG_HOME/readline/inputrc}"
+# Files named for a system library rather than a command. Nothing on PATH
+# identifies these, and they are present everywhere, so they default to on.
+_xdg_always=(readline)
 
 # App-specific XDG settings. Each file is opt-out via
 #   zstyle ':use-xdg-basedirs:<app>' enabled no
@@ -31,7 +32,9 @@ for _xdg_app in "${0:a:h}/apps"/*.zsh(N); do
   if zstyle -t ":use-xdg-basedirs:$_xdg_name" enabled; then
     source "$_xdg_app"
   elif zstyle -T ":use-xdg-basedirs:$_xdg_name" enabled; then
-    (( $+commands[$_xdg_name] )) && source "$_xdg_app"
+    if (( $+commands[$_xdg_name] || $_xdg_always[(Ie)$_xdg_name] )); then
+      source "$_xdg_app"
+    fi
   fi
 done
-unset _xdg_app _xdg_name
+unset _xdg_app _xdg_name _xdg_always
