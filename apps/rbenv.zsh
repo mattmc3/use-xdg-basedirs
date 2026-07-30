@@ -1,2 +1,2 @@
 # old: ~/.rbenv
-export RBENV_ROOT=$XDG_DATA_HOME/rbenv
+export RBENV_ROOT=${RBENV_ROOT:-$XDG_DATA_HOME/rbenv}

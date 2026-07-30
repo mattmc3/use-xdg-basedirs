@@ -64,8 +64,11 @@ them:
 
 ```zsh
 # old: ~/.cargo
-export CARGO_HOME=$XDG_DATA_HOME/cargo
+export CARGO_HOME=${CARGO_HOME:-$XDG_DATA_HOME/cargo}
 ```
+
+Every export defaults through `${VAR:-...}` so a value you already set wins.
+Nothing here overwrites your own choice.
 
 The `# old:` comment records where the app kept that variable's files before,
 and applies to the export on the next line. It is the only thing that lets
