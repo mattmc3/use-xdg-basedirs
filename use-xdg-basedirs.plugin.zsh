@@ -21,8 +21,17 @@ fi
 # readline
 export INPUTRC="${INPUTRC:-$XDG_CONFIG_HOME/readline/inputrc}"
 
-# app-specific XDG settings, loaded only when the command exists
+# App-specific XDG settings. Each file is opt-out via
+#   zstyle ':use-xdg-basedirs:<app>' enabled no
+# and opt-in for apps that are not installed, or have no command to find, via
+#   zstyle ':use-xdg-basedirs:<app>' enabled yes
+# With no style set, a file loads only when its command exists.
 for _xdg_app in "${0:a:h}/apps"/*.zsh(N); do
-  (( $+commands[${_xdg_app:t:r}] )) && source "$_xdg_app"
+  _xdg_name=${_xdg_app:t:r}
+  if zstyle -t ":use-xdg-basedirs:$_xdg_name" enabled; then
+    source "$_xdg_app"
+  elif zstyle -T ":use-xdg-basedirs:$_xdg_name" enabled; then
+    (( $+commands[$_xdg_name] )) && source "$_xdg_app"
+  fi
 done
-unset _xdg_app
+unset _xdg_app _xdg_name
