@@ -1,1 +1,2 @@
-export INPUTRC="${INPUTRC:-${XDG_CONFIG_HOME:-$HOME/.config}/readline/inputrc}"
+# old: ~/.inputrc
+export INPUTRC=$XDG_CONFIG_HOME/readline/inputrc

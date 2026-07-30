@@ -1,0 +1,2 @@
+# old: ~/.codex
+export CODEX_HOME=$XDG_CONFIG_HOME/codex

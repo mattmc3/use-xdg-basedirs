@@ -1,2 +1,3 @@
-export DUCKDB_HISTORY="${DUCKDB_HISTORY:-${XDG_STATE_HOME:-$HOME/.local/state}/duckdb/history}"
-[[ -d ${DUCKDB_HISTORY:h} ]] || mkdir -p ${DUCKDB_HISTORY:h}
+# old: ~/.duckdb_history
+export DUCKDB_HISTORY=$XDG_STATE_HOME/duckdb/history
+mkdir -p $XDG_STATE_HOME/duckdb

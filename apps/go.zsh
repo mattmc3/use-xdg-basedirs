@@ -1,2 +1,4 @@
-export GOPATH="${GOPATH:-${XDG_DATA_HOME:-$HOME/.local/share}/go}"
-export GOMODCACHE="${GOMODCACHE:-${XDG_CACHE_HOME:-$HOME/.cache}/go/mod}"
+# old: ~/go
+export GOPATH=$XDG_DATA_HOME/go
+# old: ~/go/pkg/mod
+export GOMODCACHE=$XDG_CACHE_HOME/go/mod

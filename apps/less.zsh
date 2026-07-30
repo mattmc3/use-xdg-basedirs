@@ -1,2 +1,4 @@
-export LESSKEY="${LESSKEY:-${XDG_CONFIG_HOME:-$HOME/.config}/lesskey}"
-export LESSHISTFILE="${LESSHISTFILE:-${XDG_STATE_HOME:-$HOME/.local/state}/lesshst}"
+# old: ~/.lesskey
+export LESSKEY=$XDG_CONFIG_HOME/lesskey
+# old: ~/.lesshst
+export LESSHISTFILE=$XDG_STATE_HOME/lesshst

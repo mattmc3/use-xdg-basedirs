@@ -1,2 +1,4 @@
-export KUBECONFIG="${KUBECONFIG:-${XDG_CONFIG_HOME:-$HOME/.config}/kube/config}"
-export KUBECACHEDIR="${KUBECACHEDIR:-${XDG_CACHE_HOME:-$HOME/.cache}/kube}"
+# old: ~/.kube/config
+export KUBECONFIG=$XDG_CONFIG_HOME/kube/config
+# old: ~/.kube/cache
+export KUBECACHEDIR=$XDG_CACHE_HOME/kube

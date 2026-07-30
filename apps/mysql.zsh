@@ -1,1 +1,2 @@
-export MYSQL_HISTFILE="${MYSQL_HISTFILE:-${XDG_DATA_HOME:-$HOME/.local/share}/mysql_history}"
+# old: ~/.mysql_history
+export MYSQL_HISTFILE=$XDG_DATA_HOME/mysql_history

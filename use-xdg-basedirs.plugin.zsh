@@ -18,23 +18,15 @@ elif [[ ! -O "$XDG_RUNTIME_DIR" || -L "$XDG_RUNTIME_DIR" ]]; then
   print -u2 "use-xdg-basedirs: $XDG_RUNTIME_DIR is a symlink or not owned by uid $UID"
 fi
 
-# Files named for a system library rather than a command. Nothing on PATH
-# identifies these, and they are present everywhere, so they default to on.
-_xdg_always=(readline)
+typeset -g _XDG_BASEDIRS_DIR="${0:a:h}"
+fpath=("$_XDG_BASEDIRS_DIR/functions" $fpath)
+autoload -Uz xdgbasedir
 
-# App-specific XDG settings. Each file is opt-out via
-#   zstyle ':use-xdg-basedirs:<app>' enabled no
-# and opt-in for apps that are not installed, or have no command to find, via
-#   zstyle ':use-xdg-basedirs:<app>' enabled yes
-# With no style set, a file loads only when its command exists.
-for _xdg_app in "${0:a:h}/apps"/*.zsh(N); do
-  _xdg_name=${_xdg_app:t:r}
-  if zstyle -t ":use-xdg-basedirs:$_xdg_name" enabled; then
-    source "$_xdg_app"
-  elif zstyle -T ":use-xdg-basedirs:$_xdg_name" enabled; then
-    if (( $+commands[$_xdg_name] || $_xdg_always[(Ie)$_xdg_name] )); then
-      source "$_xdg_app"
-    fi
-  fi
+# Apps are opt-in, and nothing here moves an app's files. Run xdgbasedir to see
+# what is on, what is safe to turn on, and what would shadow files you still
+# have in your home directory.
+#   zstyle ':use-xdg-basedirs:cargo' enabled yes
+for _xdg_app in "$_XDG_BASEDIRS_DIR/apps"/*.zsh(N); do
+  zstyle -t ":use-xdg-basedirs:${_xdg_app:t:r}" enabled && source "$_xdg_app"
 done
-unset _xdg_app _xdg_name _xdg_always
+unset _xdg_app
