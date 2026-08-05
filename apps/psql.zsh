@@ -6,4 +6,4 @@ export PGPASSFILE=${PGPASSFILE:-$XDG_CONFIG_HOME/pg/pgpass}
 export PGSERVICEFILE=${PGSERVICEFILE:-$XDG_CONFIG_HOME/pg/pg_service.conf}
 # old: ~/.psql_history
 export PSQL_HISTORY=${PSQL_HISTORY:-$XDG_STATE_HOME/pg/psql_history}
-mkdir -p ${PSQL_HISTORY:h}
+[[ -d ${PSQL_HISTORY:h} ]] || zf_mkdir -p ${PSQL_HISTORY:h}

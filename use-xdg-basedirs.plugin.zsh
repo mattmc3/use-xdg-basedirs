@@ -3,17 +3,26 @@
 #
 
 0=${(%):-%N}
+
+# Builtin mkdir, so a new shell doesn't fork /bin/mkdir. Apps sourced below
+# use it too, and fall back to the real mkdir if zsh/files is unavailable.
+zmodload -F zsh/files b:zf_mkdir 2>/dev/null ||
+  zf_mkdir() { command mkdir "$@" }
+
 export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-$HOME/.config}
 export XDG_CACHE_HOME=${XDG_CACHE_HOME:-$HOME/.cache}
 export XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
 export XDG_STATE_HOME=${XDG_STATE_HOME:-$HOME/.local/state}
-mkdir -p $XDG_CONFIG_HOME $XDG_CACHE_HOME $XDG_DATA_HOME $XDG_STATE_HOME
+for _xdg_dir in $XDG_CONFIG_HOME $XDG_CACHE_HOME $XDG_DATA_HOME $XDG_STATE_HOME; do
+  [[ -d $_xdg_dir ]] || zf_mkdir -p $_xdg_dir
+done
+unset _xdg_dir
 
 if [[ -z "$XDG_RUNTIME_DIR" ]]; then
   export XDG_RUNTIME_DIR="/tmp/xdg-runtime-$UID"
 fi
 if [[ ! -d "$XDG_RUNTIME_DIR" ]]; then
-  mkdir -m 700 -p "$XDG_RUNTIME_DIR"
+  zf_mkdir -m 700 -p "$XDG_RUNTIME_DIR"
 elif [[ ! -O "$XDG_RUNTIME_DIR" || -L "$XDG_RUNTIME_DIR" ]]; then
   print -u2 "use-xdg-basedirs: $XDG_RUNTIME_DIR is a symlink or not owned by uid $UID"
 fi
